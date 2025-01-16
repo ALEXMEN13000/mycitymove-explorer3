@@ -47,7 +47,7 @@ const ClubRegister = () => {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       
       toast.success("Inscription réussie ! Vous pouvez maintenant vous connecter.");
-      navigate("/club-login");
+      navigate("/club/login");
     } catch (error) {
       toast.error("Erreur lors de l'inscription. Veuillez réessayer.");
     }
@@ -169,14 +169,20 @@ const ClubRegister = () => {
               <div className="space-y-2 text-sm text-center text-gray-600">
                 <p>
                   Déjà un compte club ?{" "}
-                  <a href="/club-login" className="text-primary hover:underline">
+                  <button 
+                    onClick={() => navigate("/club/login")} 
+                    className="text-primary hover:underline"
+                  >
                     Se connecter
-                  </a>
+                  </button>
                 </p>
                 <p>
-                  <a href="/register" className="text-primary hover:underline">
+                  <button 
+                    onClick={() => navigate("/register")} 
+                    className="text-primary hover:underline"
+                  >
                     Inscription membre
-                  </a>
+                  </button>
                 </p>
               </div>
             </CardContent>

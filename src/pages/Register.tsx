@@ -175,15 +175,21 @@ const Register = () => {
               <div className="space-y-2 text-sm text-center text-gray-600">
                 <p>
                   Déjà un compte ?{" "}
-                  <a href="/login" className="text-primary hover:underline">
+                  <button 
+                    onClick={() => navigate("/login")} 
+                    className="text-primary hover:underline"
+                  >
                     Se connecter
-                  </a>
+                  </button>
                 </p>
                 <p>
                   Vous êtes un club ?{" "}
-                  <a href="/club-register" className="text-primary hover:underline">
+                  <button 
+                    onClick={() => navigate("/club/register")} 
+                    className="text-primary hover:underline"
+                  >
                     Inscription club
-                  </a>
+                  </button>
                 </p>
               </div>
             </CardContent>

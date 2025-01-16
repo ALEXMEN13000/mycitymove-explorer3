@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -29,8 +29,12 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/club/login" element={<ClubLogin />} />
-            <Route path="/club/register" element={<ClubRegister />} />
+            <Route path="/club">
+              <Route path="login" element={<ClubLogin />} />
+              <Route path="register" element={<ClubRegister />} />
+            </Route>
+            <Route path="/club-login" element={<Navigate to="/club/login" replace />} />
+            <Route path="/club-register" element={<Navigate to="/club/register" replace />} />
           </Routes>
         </Router>
       </TooltipProvider>

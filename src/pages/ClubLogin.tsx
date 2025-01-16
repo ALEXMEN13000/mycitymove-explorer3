@@ -35,7 +35,7 @@ const ClubLogin = () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
       toast.success("Connexion réussie !");
-      navigate("/club-dashboard"); // Redirection vers le dashboard club
+      navigate("/dashboard"); // Redirection vers le dashboard club
     } catch (error) {
       toast.error("Erreur lors de la connexion. Veuillez réessayer.");
     }
@@ -93,14 +93,20 @@ const ClubLogin = () => {
               <div className="space-y-2 text-sm text-center text-gray-600">
                 <p>
                   Pas encore de compte club ?{" "}
-                  <a href="/club-register" className="text-primary hover:underline">
+                  <button 
+                    onClick={() => navigate("/club/register")} 
+                    className="text-primary hover:underline"
+                  >
                     Inscrire mon club
-                  </a>
+                  </button>
                 </p>
                 <p>
-                  <a href="/login" className="text-primary hover:underline">
+                  <button 
+                    onClick={() => navigate("/login")} 
+                    className="text-primary hover:underline"
+                  >
                     Connexion membre
-                  </a>
+                  </button>
                 </p>
               </div>
             </CardContent>

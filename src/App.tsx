@@ -29,8 +29,8 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/club-login" element={<ClubLogin />} />
-            <Route path="/club-register" element={<ClubRegister />} />
+            <Route path="/club/login" element={<ClubLogin />} />
+            <Route path="/club/register" element={<ClubRegister />} />
           </Routes>
         </Router>
       </TooltipProvider>

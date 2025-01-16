@@ -20,13 +20,31 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
     }
   }, [onSearch]);
 
+  const normalizeSearch = (query: string) => {
+    // Normalise et sépare les mots
+    const words = query
+      .toLowerCase()
+      .replace(/\s+de\s+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .split(' ')
+      .filter(word => word.length > 0);
+    
+    // Trie les mots pour avoir un ordre cohérent
+    words.sort();
+    
+    // Rejoint les mots
+    return words.join(' ');
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
+      const normalizedQuery = normalizeSearch(searchQuery);
       if (onSearch) {
-        onSearch(searchQuery);
+        onSearch(normalizedQuery);
       } else {
-        navigate(`/activities?search=${encodeURIComponent(searchQuery)}`);
+        navigate(`/activities?search=${encodeURIComponent(normalizedQuery)}`);
       }
     }
   };
@@ -40,9 +58,10 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
         className="pl-10 h-12 rounded-full border-2 border-gray-200 focus:border-primary"
         value={searchQuery}
         onChange={(e) => {
-          setSearchQuery(e.target.value);
-          if (onSearch) {
-            onSearch(e.target.value);
+          const value = e.target.value;
+          setSearchQuery(value);
+          if (onSearch && value.length >= 2) {
+            onSearch(normalizeSearch(value));
           }
         }}
       />

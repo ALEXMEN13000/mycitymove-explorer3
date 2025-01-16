@@ -21,7 +21,7 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <Router basename="/mycitymove-explorer-web">
+        <Router>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/activities" element={<Activities />} />

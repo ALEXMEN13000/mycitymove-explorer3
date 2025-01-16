@@ -52,6 +52,127 @@ const activities = [
     dayOfWeek: "Jeudi",
     imageUrl: "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf",
   },
+  {
+    title: "Cours de Natation",
+    category: "Sport",
+    subcategory: "Natation",
+    location: "Piscine Municipale Marseille",
+    price: 15,
+    level: "Débutant",
+    time: "17:00",
+    dayOfWeek: "Lundi",
+    imageUrl: "https://images.unsplash.com/photo-1600965962361-9035dbfd1c50",
+  },
+  {
+    title: "Cours de Guitare",
+    category: "Musique",
+    subcategory: "Guitare",
+    location: "École de Musique Marseille",
+    price: 30,
+    level: "Intermédiaire",
+    time: "18:00",
+    dayOfWeek: "Mardi",
+    imageUrl: "https://images.unsplash.com/photo-1510915361894-db8b60106cb1",
+  },
+  {
+    title: "Cours de Danse Classique",
+    category: "Danse",
+    subcategory: "Classique",
+    location: "Studio de Danse Marseille",
+    price: 28,
+    level: "Débutant",
+    time: "15:00",
+    dayOfWeek: "Mercredi",
+    imageUrl: "https://images.unsplash.com/photo-1518834107812-67b0b7c58434",
+  },
+  {
+    title: "Atelier Peinture",
+    category: "Art",
+    subcategory: "Peinture",
+    location: "Atelier des Arts Marseille",
+    price: 40,
+    level: "Tous niveaux",
+    time: "14:00",
+    dayOfWeek: "Samedi",
+    imageUrl: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b",
+  },
+  {
+    title: "Cours de Boxe",
+    category: "Sport",
+    subcategory: "Boxe",
+    location: "Club de Boxe Marseille",
+    price: 22,
+    level: "Débutant",
+    time: "19:00",
+    dayOfWeek: "Vendredi",
+    imageUrl: "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed",
+  },
+  {
+    title: "Méditation Guidée",
+    category: "Bien-être",
+    subcategory: "Méditation",
+    location: "Centre Mindfulness Marseille",
+    price: 15,
+    level: "Tous niveaux",
+    time: "08:00",
+    dayOfWeek: "Dimanche",
+    imageUrl: "https://images.unsplash.com/photo-1506126613408-eca07ce68773",
+  },
+  {
+    title: "Cours de Football",
+    category: "Sport",
+    subcategory: "Football",
+    location: "Stade Vélodrome",
+    price: 18,
+    level: "Tous niveaux",
+    time: "16:00",
+    dayOfWeek: "Mercredi",
+    imageUrl: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55",
+  },
+  {
+    title: "Atelier Photographie",
+    category: "Art",
+    subcategory: "Photographie",
+    location: "Studio Photo Marseille",
+    price: 45,
+    level: "Intermédiaire",
+    time: "10:00",
+    dayOfWeek: "Samedi",
+    imageUrl: "https://images.unsplash.com/photo-1452780212940-6f5c0d14d848",
+  },
+  {
+    title: "Cours de Violon",
+    category: "Musique",
+    subcategory: "Violon",
+    location: "Conservatoire de Marseille",
+    price: 40,
+    level: "Débutant",
+    time: "16:30",
+    dayOfWeek: "Jeudi",
+    imageUrl: "https://images.unsplash.com/photo-1612225330812-01a9c6b355ec",
+  },
+  {
+    title: "Pilates",
+    category: "Bien-être",
+    subcategory: "Pilates",
+    location: "Centre Fitness Marseille",
+    price: 25,
+    level: "Tous niveaux",
+    time: "12:00",
+    dayOfWeek: "Mardi",
+    imageUrl: "https://images.unsplash.com/photo-1518611012118-696072aa579a",
+  },
+  {
+    title: "Cours de Basketball",
+    category: "Sport",
+    subcategory: "Basketball",
+    location: "Palais des Sports Marseille",
+    price: 20,
+    level: "Débutant",
+    time: "17:30",
+    dayOfWeek: "Vendredi",
+    imageUrl: "https://images.unsplash.com/photo-1546519638-68e109498ffc",
+  }
 ];
 
 const marseille_districts = [
@@ -83,6 +204,17 @@ const daysOfWeek = [
   "Dimanche",
 ];
 
+const normalizeText = (text: string) => {
+  return text
+    .toLowerCase()
+    .replace(/cours\s+de\s+/g, 'cours ')
+    .replace(/séance\s+de\s+/g, 'séance ')
+    .replace(/atelier\s+de\s+/g, 'atelier ')
+    .replace(/\s+de\s+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
 const Activities = () => {
   const [searchParams] = useSearchParams();
   const [filters, setFilters] = useState({
@@ -108,12 +240,27 @@ const Activities = () => {
     }
   }, [searchParams]);
 
+  const matchesSearchTerms = (activity: any, searchTerms: string[]) => {
+    const activityText = normalizeText(`${activity.title} ${activity.category} ${activity.subcategory} ${activity.location}`);
+    
+    const hasPrefix = searchTerms.some(term => ["cours", "séance", "atelier"].includes(term));
+    if (hasPrefix) {
+      const activityType = searchTerms.find(term => !["cours", "séance", "atelier"].includes(term));
+      if (activityType) {
+        return normalizeText(activity.title).includes(activityType) ||
+               normalizeText(activity.subcategory).includes(activityType);
+      }
+    }
+    
+    return searchTerms.every(term => activityText.includes(term));
+  };
+
   const filteredActivities = activities.filter((activity) => {
-    const matchesSearch = !searchQuery || 
-      activity.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      activity.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      activity.subcategory.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      activity.location.toLowerCase().includes(searchQuery.toLowerCase());
+    const searchTerms = searchQuery.toLowerCase()
+      .split(' ')
+      .filter(term => term !== 'de' && term.length > 0);
+    
+    const matchesSearch = !searchQuery || matchesSearchTerms(activity, searchTerms);
 
     const matchesLocation = !filters.location || activity.location === filters.location;
     const matchesLevel = !filters.level || activity.level === filters.level;
